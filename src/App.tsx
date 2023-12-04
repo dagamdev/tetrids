@@ -1,12 +1,12 @@
-import { useState } from 'react'
 import './App.css'
+import Canvas from './components/canvas'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
       <h1>Tetris</h1>
+      <Canvas />
     </>
   )
 }
