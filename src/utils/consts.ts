@@ -1,4 +1,4 @@
-export const PIECES = [
+export const SHAPES = [
   [
     [2, 2],
     [2, 2]
