@@ -57,9 +57,9 @@ export default function Canvas ({ setScore, gameStatus, setGameStatus }: {
       canvas.width = BOARD_WIDTH * BLOCK_SIZE
       canvas.height = BOARD_HEIGHT * BLOCK_SIZE
     
-      const draw = () => {      
-        board.forEach((row, y) => {
-          row.forEach((value, x) => {
+      const draw = () => {   
+        for (const [y, row] of board.entries()) {
+          for (const [x, value] of row.entries()) {
             context.fillStyle = backgroundColor
             context.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
             context.strokeStyle = borderColor
@@ -71,23 +71,23 @@ export default function Canvas ({ setScore, gameStatus, setGameStatus }: {
               context.strokeStyle = backgroundColor
               context.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
             }
-          })
-        })
+          }
+        }
       
         if (gameStatus === 'started') {
-          piece.shape.forEach((row, y) => {
-            row.forEach((value, x) => {
+          for (const [y, row] of piece.shape.entries()) {
+            for (const [x, value] of row.entries()) {
               const finalY = piece.position.y + y
               if (value) {
-                x = piece.position.x + x
+                const finalX = piece.position.x + x
   
                 context.fillStyle = pieceColor
-                context.fillRect(x * BLOCK_SIZE, finalY * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+                context.fillRect(finalX * BLOCK_SIZE, finalY * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
                 context.strokeStyle = backgroundColor
-                context.strokeRect(x * BLOCK_SIZE, finalY * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+                context.strokeRect(finalX * BLOCK_SIZE, finalY * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
               }
-            })
-          })
+            }
+          }
 
           boardStatus = 'content'
         }
@@ -104,11 +104,13 @@ export default function Canvas ({ setScore, gameStatus, setGameStatus }: {
         })
       }
 
-      const handleRemoveRow = () => {
-        if (board.some(r => r.every(c => c))) {
-          board.splice(board.findIndex(r => r.every(c => c)), 1)
-          board.unshift(board[0])
-          setScore(s => s + BOARD_WIDTH)
+      const handleRemoveRows = () => {
+        for (const [y, row] of board.entries()) {
+          if (row.every(c => c === 1)) {
+            board.splice(y, 1)
+            board.unshift(Array(BOARD_WIDTH).fill(0))
+            setScore(s => s + BOARD_WIDTH)
+          }
         }
       }
 
@@ -147,15 +149,13 @@ export default function Canvas ({ setScore, gameStatus, setGameStatus }: {
       }
 
       const solidifyPiece = () => {
-        const { y, x } = piece.position
-        piece.shape.forEach((row, rowI) => {
-          row.forEach((value, columI) => {
-            if (value) board[y+rowI][x+columI] = 1
-          })
-        })
+        for (const [rowI, row] of piece.shape.entries()) {
+          for (const [columI, value] of row.entries()) {
+            if (value) board[piece.position.y+rowI][piece.position.x+columI] = 1
+          }
+        }
 
-
-        handleRemoveRow()
+        handleRemoveRows()
         if (handleEndGame()) return
         generateRandomPiece()
       }
@@ -225,7 +225,7 @@ export default function Canvas ({ setScore, gameStatus, setGameStatus }: {
           const { y, x } = piece.position
   
           time++
-          if (time === 1000 / fps) {          
+          if (time === 600 / fps) {          
             if (checkCollision(y+1, x)) {
               solidifyPiece()
             } else {
