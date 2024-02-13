@@ -1,0 +1,1 @@
+export type GameStatus = 'before' | 'started' | 'finished'
