@@ -1,12 +1,32 @@
-import './App.css'
 import Canvas from './components/canvas'
+import { useState } from 'react'
+import type { GameStatus } from './types'
 
-function App() {
+function App () {
+  const [gameStatus, setGameStatus] = useState<GameStatus>('before')
+  const [score, setScore] = useState(0)
+
+  const handleClick = () => {
+    setGameStatus('started')
+    setScore(0)
+  }
 
   return (
     <>
-      <h1>Tetris</h1>
-      <Canvas />
+      <section className='tetris'>
+        <header>
+          <strong>Score: <span>{score}</span></strong>
+          {gameStatus === 'finished'
+            ? <em>End of the game</em>
+            : gameStatus === 'started' && <em>Game in progress</em>
+          }
+          {gameStatus === 'before'
+            ? <button onClick={handleClick}>Play game</button>
+            : gameStatus === 'finished' && <button onClick={handleClick}>Play again</button>
+          }
+        </header>
+        <Canvas {...{setScore, gameStatus, setGameStatus}} />
+      </section>
     </>
   )
 }
