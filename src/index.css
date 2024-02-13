@@ -34,8 +34,8 @@ canvas {
 }
 
 .version {
-  top: 10px;
   left: 10px;
+  bottom: 10px;
   position: absolute;
   font-size: smaller;
   font-weight: 500;

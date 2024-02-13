@@ -14,7 +14,6 @@ function App () {
 
   return (
     <>
-      <span className='version'>v{packageData.version}</span>
       <section className='tetris'>
         <header>
           <strong>Score: <span>{score}</span></strong>
@@ -29,6 +28,7 @@ function App () {
         </header>
         <Canvas {...{setScore, gameStatus, setGameStatus}} />
       </section>
+      <span className='version'>v{packageData.version}</span>
     </>
   )
 }
