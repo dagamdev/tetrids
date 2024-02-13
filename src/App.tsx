@@ -1,6 +1,7 @@
 import Canvas from './components/canvas'
 import { useState } from 'react'
 import type { GameStatus } from './types'
+import packageData from '../package.json'
 
 function App () {
   const [gameStatus, setGameStatus] = useState<GameStatus>('before')
@@ -13,6 +14,7 @@ function App () {
 
   return (
     <>
+      <span className='version'>v{packageData.version}</span>
       <section className='tetris'>
         <header>
           <strong>Score: <span>{score}</span></strong>
